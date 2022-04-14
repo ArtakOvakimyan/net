@@ -12,13 +12,13 @@ def get_address(arg):
         try:
             return urllib.request.urlopen('http://google.com/', timeout=10)
         except:
-            print("нет соединения")
+            print("Нет соединения")
 
     if test_connection() is not None:
         try:
             return socket.gethostbyname(arg)
         except:
-            print("невозможно разрешить доменное")
+            print("Не удаётся разрешить доменное имя")
             return
     else:
         return
