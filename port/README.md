@@ -5,6 +5,9 @@
 Запуск производится через консоль (cmd - Windows / bash_terminal - Unix) с передачей необходимых аргументов
 
     $ python3 main.py host_name [-s] [-f] [-tcp] [-udp]
+
+<li> main.py - имя исполняемого файла
+
 Позиционный аргмент:
   <li>
   *host_name [адрес хоста]
