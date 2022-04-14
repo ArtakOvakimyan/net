@@ -2,7 +2,26 @@ import argparse
 import socket
 import time
 import threading
+import urllib.request
+import urllib.error
 from queue import Queue
+
+
+def get_address(arg):
+    def test_connection():
+        try:
+            return urllib.request.urlopen('http://google.com/', timeout=10)
+        except:
+            print("нет соединения")
+
+    if test_connection() is not None:
+        try:
+            return socket.gethostbyname(arg)
+        except:
+            print("невозможно разрешить доменное")
+            return
+    else:
+        return
 
 
 def scan_tcp(address, port):
@@ -41,15 +60,6 @@ def parse():
     return args
 
 
-def resolve():
-    address = socket.gethostbyname(parse().host_name)
-    print('Starting scan on host: ', address)
-    if parse().tcp:
-        scan_in_threads(scan_tcp, address)
-    if parse().udp:
-        scan_in_threads(scan_udp, address)
-
-
 def scan_in_threads(scan, ip):
     socket.setdefaulttimeout(1)
     q = Queue()
@@ -71,6 +81,16 @@ def scan_in_threads(scan, ip):
 
     q.join()
     print('Time taken for {}'.format(scan.__name__), time.time() - start_time)
+
+
+def resolve():
+    address = get_address(parse().host_name)
+    if address != None:
+        print('Starting scan on host: ', address)
+        if parse().tcp:
+            scan_in_threads(scan_tcp, address)
+        if parse().udp:
+            scan_in_threads(scan_udp, address)
 
 
 if __name__ == "__main__":
