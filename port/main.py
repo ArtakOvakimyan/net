@@ -18,14 +18,14 @@ def get_address(arg):
         try:
             return socket.gethostbyname(arg)
         except:
-            print("Не удаётся разрешить доменное имя")
-            return
+            print("Невозможно разрешить доменное")
     else:
         return
 
 
 def scan_tcp(address, port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(3)
         try:
             s.connect((address, port))
             print('TCP Port is open:', port)
@@ -34,13 +34,13 @@ def scan_tcp(address, port):
 
 
 def scan_udp(address, port):
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_ICMP) as s:
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+        s.settimeout(3)
         try:
-            s.sendto(b'test', (address, port))
-            s.recvfrom(1024)
-        except socket.timeout:
+            s.sendto(b'\x00' * 64, (address, port))
+            data, _ = s.recvfrom(512)
             print("UDP Port Open:", str(port))
-        except:
+        except socket.error:
             pass
 
 
@@ -51,7 +51,7 @@ def parse():
                                                  "if type is not mentioned, both will be checked")
     parser.add_argument('host_name', type=str)
     parser.add_argument('-s', default=1, type=int, help='Нижняя граница сканируемых портов')
-    parser.add_argument('-f', default=2000, type=int, help='Верхняя граница сканируемых портов')
+    parser.add_argument('-f', default=100, type=int, help='Верхняя граница сканируемых портов')
     parser.add_argument('-tcp', action='store_true', help='TCP порты')
     parser.add_argument('-udp', action='store_true', help='UDP порты')
     args = parser.parse_args()
@@ -71,7 +71,7 @@ def scan_in_threads(scan, ip):
             scan(ip, port_num)
             q.task_done()
 
-    for x in range(100):
+    for _ in range(100):
         t = threading.Thread(target=threader)
         t.daemon = True
         t.start()
@@ -94,5 +94,4 @@ def resolve():
 
 
 if __name__ == "__main__":
-    socket.setdefaulttimeout(1)
     resolve()
