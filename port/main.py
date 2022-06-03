@@ -18,7 +18,7 @@ def get_address(arg):
         try:
             return socket.gethostbyname(arg)
         except:
-            print("Невозможно разрешить доменное")
+            print("Невозможно разрешить доменное имя")
     else:
         return
 
