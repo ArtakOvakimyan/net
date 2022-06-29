@@ -22,10 +22,10 @@
  Сервер:
  </li>
 
- ![sample](./attachments/server.png)
+ ![sample](./attachments/terminal.png)
  
  <li>
  Клиент:
  </li>
  
- ![sample](./attachments/client.png)
+ ![sample](./attachments/time.png)
