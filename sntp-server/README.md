@@ -19,13 +19,13 @@
 Проверим работоспособность:
 ------------------
  <li>
- Сервер:
+ Запуск:
  </li>
 
  ![sample](./attachments/terminal.png)
  
  <li>
- Клиент:
+ Реальное время:
  </li>
  
  ![sample](./attachments/time.png)
